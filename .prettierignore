@@ -1,0 +1,9 @@
+node_modules
+dist
+public
+adrum-static
+/logs
+*.log
+# Ignore artifacts:
+build
+coverage

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Нет подключения | Offline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+      background: radial-gradient(circle at 70% 30%, #2196f3 20%, #1565c0 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-attachment: fixed;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .offline-container {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 18px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      max-width: 350px;
+      width: 95%;
+      margin: auto;
+    }
+
+    .offline-icon {
+      font-size: 64px;
+      margin-bottom: 1.5rem;
+      animation: float 1.6s infinite ease-in-out alternate;
+      user-select: none;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-18px);
+      }
+    }
+
+    h1 {
+      margin: 0 0 0.7em 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 2rem;
+    }
+
+    p {
+      margin: 0 0 1.7em 0;
+      font-size: 1.12rem;
+      color: #bbdefb;
+    }
+
+    .try-again {
+      display: inline-block;
+      padding: 0.7em 1.6em;
+      background: #fff;
+      color: #1976d2;
+      border: none;
+      border-radius: 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 3px 15px rgba(21, 101, 192, 0.13);
+      margin-bottom: 0.2em;
+    }
+
+    .try-again:hover {
+      background: #1976d2;
+      color: #fff;
+    }
+
+    .copyright {
+      font-size: 0.85em;
+      color: #90caf9;
+      margin-top: 2rem;
+      opacity: 0.8;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">🌐🚫</div>
+    <h1>Вы оффлайн</h1>
+    <p>Похоже, нет интернет-соединения.<br>Проверьте сеть и попробуйте снова.</p>
+    <button class="try-again" onclick="location.reload()">Попробовать ещё раз</button>
+  </div>
+  <div class="copyright">PWA работает даже без сети</div>
+</body>
+
+</html>

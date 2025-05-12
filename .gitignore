@@ -1,0 +1,17 @@
+.env
+*.csv
+.idea/
+.vscode/
+.npmrc
+node_modules/
+build/
+tmp/
+temp/
+swagger.json
+/Postgres-14/pg/
+/logs
+/coverage
+*.conf
+nginx*
+*.log
+dist
