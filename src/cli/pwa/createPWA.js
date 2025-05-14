@@ -101,7 +101,7 @@ export async function createPWAProject(projectName, options = {}) {
     ]
   };
 
-  const templateDir = path.join(__dirname, '..', '..', 'templates');
+  const templateDir = path.join(__dirname, '..', 'templates');
 
   // Копируем основные файлы шаблона
   ['index.html', 'serviceWorker.js', 'offline.html'].forEach(file => {
