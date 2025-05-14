@@ -484,39 +484,4 @@ export class App {
   }
 }
 
-// // Экспортируем CLI функции для удобства импорта
-// export function createPWA(projectName: string) {
-//   if (typeof window === 'undefined') {
-//     try {
-//       // Динамический импорт CLI-скрипта для создания PWA
-//       import('../cli/pwa/createPWA').then(cli => {
-//         console.log(`Запуск создания PWA проекта: ${projectName}`);
-//       }).catch(err => {
-//         console.error('Ошибка при запуске CLI для PWA:', err);
-//       });
-//     } catch (error) {
-//       console.error('Не удалось загрузить CLI для PWA:', error);
-//     }
-//   } else {
-//     console.warn('createPWA() можно вызывать только в Node.js окружении');
-//   }
-// }
-
-// export function createServiceWorker() {
-//   if (typeof window === 'undefined') {
-//     try {
-//       // Динамический импорт CLI-скрипта для создания Service Worker
-//       import('../cli/serviceWorker/createServiceWorker').then(cli => {
-//         console.log('Запуск создания Service Worker');
-//       }).catch(err => {
-//         console.error('Ошибка при запуске CLI для Service Worker:', err);
-//       });
-//     } catch (error) {
-//       console.error('Не удалось загрузить CLI для Service Worker:', error);
-//     }
-//   } else {
-//     console.warn('createServiceWorker() можно вызывать только в Node.js окружении');
-//   }
-// }
-
 export default App;

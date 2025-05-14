@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import inquirer from 'inquirer';
 import path from 'path';
 import fs from 'fs';
@@ -16,19 +14,19 @@ async function main() {
     {
       type: 'list',
       name: 'strategy',
-      message: 'Choose caching strategy:',
+      message: 'Выберите кеш стратегию:',
       choices: CACHING_STRATEGIES
     },
     {
       type: 'confirm',
       name: 'enablePush',
-      message: 'Enable push notifications support?',
+      message: 'Включить поддержку push-уведомлений?',
       default: false
     },
     {
       type: 'confirm',
       name: 'offlineUI',
-      message: 'Add offline fallback UI?',
+      message: 'Добавить Offline страницу?',
       default: true
     }
   ]);

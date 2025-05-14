@@ -1,8 +1,10 @@
-#!/usr/bin/env node
-
 import path from 'path';
 import fs from 'fs';
 import inquirer from 'inquirer';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DISPLAY_OPTIONS = ['standalone', 'fullscreen', 'minimal-ui', 'browser'];
 
@@ -10,13 +12,13 @@ async function main() {
   // Проверка имени проекта
   const projectName = process.argv[2];
   if (!projectName) {
-    console.error('Please specify the project name');
+    console.error('Пожалуйста, укажите название проекта');
     process.exit(1);
   }
 
   const projectDir = path.join(process.cwd(), projectName);
   if (fs.existsSync(projectDir)) {
-    console.error(`Directory "${projectName}" already exists.`);
+    console.error(`Директория "${projectName}" уже существует.`);
     process.exit(1);
   }
 
@@ -25,21 +27,21 @@ async function main() {
     {
       type: 'input',
       name: 'name',
-      message: 'Application name:',
+      message: 'Название приложения:',
       default: projectName
     },
     {
       type: 'input',
       name: 'shortName',
-      message: 'Short name (for home screen):',
+      message: 'Короткое название (для стартового экрана):',
       default: projectName,
-      validate: (input) => input.length <= 12 || 'Short name should be 12 characters or less'
+      validate: (input) => input.length <= 12 || 'Краткое имя должно содержать не более 12 символов'
     },
     {
       type: 'input',
       name: 'description',
-      message: 'Description:',
-      default: 'A Progressive Web Application'
+      message: 'Описание:',
+      default: 'Progressive Web Application'
     },
     {
       type: 'list',
@@ -53,19 +55,19 @@ async function main() {
       name: 'backgroundColor',
       message: 'Background color (hex code):',
       default: '#ffffff',
-      validate: (input) => /^#[0-9A-Fa-f]{6}$/.test(input) || 'Please enter a valid hex color code (e.g., #ffffff)'
+      validate: (input) => /^#[0-9A-Fa-f]{6}$/.test(input) || 'Пожалуйста, введите действительный hex color код (e.g., #ffffff)'
     },
     {
       type: 'input',
       name: 'themeColor',
-      message: 'Theme color (hex code):',
+      message: 'Цвет темы (hex code):',
       default: '#2196f3',
-      validate: (input) => /^#[0-9A-Fa-f]{6}$/.test(input) || 'Please enter a valid hex color code (e.g., #2196f3)'
+      validate: (input) => /^#[0-9A-Fa-f]{6}$/.test(input) || 'Пожалуйста, введите действительный hex color код (e.g., #2196f3)'
     },
     {
       type: 'confirm',
       name: 'generateIcons',
-      message: 'Do you want to copy default icons?',
+      message: 'Добавить иконки по умолчанию?',
       default: true
     }
   ]);
