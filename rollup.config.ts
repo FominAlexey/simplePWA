@@ -34,7 +34,8 @@ export default [
     input: {
       'cli/pwa/createPWA': './src/cli/pwa/createPWA.js',
       'cli/pwa/pwa-create': './src/cli/pwa/pwa-create.js',
-      'cli/serviceWorker/createServiceWorker': './src/cli/serviceWorker/createServiceWorker.js'
+      'cli/serviceWorker/createServiceWorker': './src/cli/serviceWorker/createServiceWorker.js',
+      'cli/serviceWorker/serviceWorker': './src/cli/serviceWorker/serviceWorker.js'
     },
     output: {
       dir: 'dist',
