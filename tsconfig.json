@@ -43,6 +43,9 @@
   ],
   "include": [
 		"src/**/*.ts",
-		"src/**/*.tsx"
-, "src/cli/serviceWorker/createServiceWorker.js", "src/cli/pwa/createPWA.js"	],
+		"src/**/*.tsx",
+    "src/cli/serviceWorker/createServiceWorker.js",
+    "src/cli/pwa/createPWA.js",
+    "src/cli/pwa/createPWA.d.ts"
+  ],
 }

@@ -6,6 +6,7 @@ import {
 } from './component';
 import { Store } from './store';
 import { SyncDataManager } from '../indexedDB';
+import { createPWAProject } from '../cli/pwa/createPWA.js';
 
 // Регистрация кастомных элементов
 customElements.define('desktop-home', DesktopHome);
@@ -481,6 +482,16 @@ export class App {
       console.error('Ошибка при проверке/синхронизации:', error);
       return { synced: false, reason: 'error', error };
     }
+  }
+
+  /**
+   * Создает новый PWA проект
+   * @param projectName - Имя проекта
+   * @param options - Настройки проекта
+   * @returns Promise с информацией о созданном проекте
+   */
+  static async createPWAProject(projectName: string, options = {}) {
+    return createPWAProject(projectName, options);
   }
 }
 
