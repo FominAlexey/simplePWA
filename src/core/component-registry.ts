@@ -23,28 +23,32 @@ export function registerComponent(
   ComponentClass: typeof Component,
   tagName?: string
 ): string {
-  // Если тег не указан - генерируем из имени класса
+  // Генерируем имя тега
   const tag = tagName || getTagNameFromClass(ComponentClass);
 
-  // Если компонент уже зарегистрирован - просто возвращаем имя тега
-  if (registeredComponents.has(tag)) {
+  // Уже зарегистрировано с ЭТИМ классом?
+  if (componentTagMap.has(ComponentClass)) {
     return tag;
   }
 
-  // Регистрируем компонент в customElements
-  try {
-    customElements.define(tag, ComponentClass);
-    registeredComponents.add(tag);
-    componentTagMap.set(ComponentClass, tag);
-    console.log(`✓ Зарегистрирован компонент: ${ComponentClass.name} как <${tag}>`);
-  } catch (error) {
-    console.error(`✗ Ошибка при регистрации компонента ${ComponentClass.name}:`, error);
-    // Если компонент не удалось зарегистрировать, но он уже есть в реестре
-    if (customElements.get(tag)) {
-      registeredComponents.add(tag);
-      componentTagMap.set(ComponentClass, tag);
-    }
+  // Уже есть такой тег, но с ДРУГИМ классом?
+  const existing = customElements.get(tag);
+  if (existing && existing !== ComponentClass) {
+    // Не регистрируем снова, иначе будет ошибка!
+    throw new Error(
+      `Тег <${tag}> уже зарегистрирован с другим классом: ${existing.name}`
+    );
   }
+
+  // Регистрируем, если еще не зарегистрирован
+  if (!customElements.get(tag)) {
+    customElements.define(tag, ComponentClass);
+    console.log(`✓ Зарегистрирован компонент: ${ComponentClass.name} как <${tag}>`);
+  }
+
+  // Вносим в карты
+  registeredComponents.add(tag);
+  componentTagMap.set(ComponentClass, tag);
 
   return tag;
 }
