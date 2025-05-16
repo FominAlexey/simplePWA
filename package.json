@@ -4,7 +4,12 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "typings": "dist/types/index.d.ts",
-  "license": "ISC",
+  "license": "MIT",
+  "author": "Fomin Aleksey Vadimovich <lekha.fomin2013@yandex.ru",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FominAlexey/simplePWA.git"
+  },
   "scripts": {
     "build": "tsc && rollup -c rollup.config.ts",
     "test": "jest --color",
