@@ -31,7 +31,7 @@ yarn add simple-pwa
 ## 🧪 Быстрый старт
 
 ```js
-import { App } from 'simple-pwa';
+import { App } from '@dakir/simple-pwa';
 
 // Создайте экземпляр приложения
 const app = App.create({
@@ -76,7 +76,7 @@ const app = new App({ routes });
 Создавайте адаптивные компоненты, наследуясь от базового класса:
 
 ```js
-import { Component } from 'simple-pwa';
+import { Component } from '@dakir/simple-pwa';
 
 class CustomComponent extends Component {
   render() {
@@ -108,7 +108,7 @@ customElements.define('custom-component', CustomComponent);
 Глобальное состояние с реактивными обновлениями:
 
 ```js
-import { Store } from 'simple-pwa';
+import { Store } from '@dakir/simple-pwa';
 
 // Создание глобального хранилища
 const appStore = new Store({
@@ -136,7 +136,7 @@ unsubscribe();
 SimplePWA включает мощный менеджер синхронизации для работы с данными в оффлайн-режиме:
 
 ```js
-import { App } from 'simple-pwa';
+import { App } from '@dakir/simple-pwa';
 
 const app = App.create({
   syncDataManagerOptions: {
@@ -195,7 +195,7 @@ CLI поможет настроить стратегии кеширования 
 #### 🏁 Создание приложения
 
 ```js
-import { App } from 'simple-pwa';
+import { App } from '@dakir/simple-pwa';
 
 const app = App.create({
   rootElement: '#app', // или HTMLElement
@@ -264,7 +264,7 @@ app.setupAutoSync({
 Реактивный глобальный стор для хранения состояния приложения.
 
 ```js
-import { Store } from 'simple-pwa';
+import { Store } from '@dakir/simple-pwa';
 
 // Создать стор
 const store = new Store({ theme: 'light', counter: 0 });
@@ -288,7 +288,7 @@ unsubscribe();
 Базовый класс `Component` и производные `DesktopComponent`, `MobileComponent`.
 
 ```js
-import { Component } from 'simple-pwa';
+import { Component } from '@dakir/simple-pwa';
 
 class MyCounter extends Component {
   render() {
