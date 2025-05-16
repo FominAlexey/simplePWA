@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "es5",
+    "target": "es2015",
     "module": "esnext",
     "baseUrl": "./",
     "lib": [
@@ -22,11 +22,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "useDefineForClassFields": true,
+    "experimentalDecorators": true,
   },
   "ts-node": {
     "compilerOptions": {
-      "target": "es5",
+      "target": "es2015",
       "esModuleInterop": true,
       "module": "CommonJS"
     }
@@ -44,8 +46,6 @@
   "include": [
 		"src/**/*.ts",
 		"src/**/*.tsx",
-    "src/cli/serviceWorker/createServiceWorker.js",
-    "src/cli/pwa/createPWA.js",
-    "src/cli/pwa/createPWA.d.ts"
+		"src/**/*.js",
   ],
 }
