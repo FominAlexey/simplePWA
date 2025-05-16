@@ -6,12 +6,8 @@ import {
 } from './component';
 import { Store } from './store';
 import { SyncDataManager } from '../indexedDB';
-
-// Регистрация кастомных элементов
-customElements.define('desktop-home', DesktopHome);
-customElements.define('mobile-home', MobileHome);
-customElements.define('desktop-about', DesktopAbout);
-customElements.define('mobile-about', MobileAbout);
+import { createElement } from './component-registry';
+type ComponentConstructor<T extends Component = Component> = new () => T;
 const appStore = new Store({ user: null, theme: 'light', isSyncing: false });
 
 interface AppConfig {
@@ -165,11 +161,9 @@ export class App {
   /**
    * Создает новый компонент и возвращает его
    */
-  public createComponent<T extends Component>(ComponentClass: new () => T): T {
-    const component = new ComponentClass();
-    return component;
+  public createComponent<T extends Component>(ComponentClass: ComponentConstructor<T>): T {
+    return createElement<T>(ComponentClass);
   }
-
   /**
    * Добавить глобальный слушатель событий
    */

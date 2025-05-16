@@ -1,4 +1,5 @@
 import { Component } from './component';
+import { getTagForComponent } from './component-registry';
 import { Store } from './store';
 
 type DeviceType = 'mobile' | 'desktop';
@@ -7,19 +8,6 @@ export interface Route {
   path: string;
   desktopComponent: typeof Component;
   mobileComponent: typeof Component;
-}
-
-function getTagNameForComponent(ComponentClass: typeof Component): string {
-  // Сопоставление классов с именами тегов (т.к. регистрируются под конкретными тегами)
-  const map = new Map([
-    ['DesktopHome', 'desktop-home'],
-    ['MobileHome', 'mobile-home'],
-    ['DesktopAbout', 'desktop-about'],
-    ['MobileAbout', 'mobile-about'],
-    // Добавьте свои компоненты здесь, если появятся новые!
-  ]);
-  // По имени класса возвращаем имя тега
-  return map.get(ComponentClass.name) || '';
 }
 
 export class Router {
@@ -135,60 +123,66 @@ export class Router {
     this.handleNavigation();
   }
 
+  // Вспомогательный метод для получения имени тега
+  private getTagNameForComponent(ComponentClass: typeof Component): string {
+    const mapping: Record<string, string> = {
+      'DesktopHome': 'desktop-home',
+      'MobileHome': 'mobile-home',
+      'DesktopAbout': 'desktop-about',
+      'MobileAbout': 'mobile-about'
+      // Добавьте другие компоненты по необходимости
+    };
+
+    return mapping[ComponentClass.name] || ComponentClass.name.toLowerCase().replace(/([a-z])([A-Z])/g, '$1-$2');
+  }
+
    /**
    * Рендеринг текущего компонента в зависимости от типа устройства
    */
-   private render() {
-    // Если предыдущий компонент существует, удаляем его
-    if (this.currentComponent && this.currentComponent.parentNode) {
-      this.currentComponent.parentNode.removeChild(this.currentComponent);
-      this.currentComponent = null;
-    }
-
-    if (!this.currentRoute) {
-      // Маршрут не найден
-      const notFoundElement = document.createElement('div');
-      notFoundElement.innerHTML = `<h1>404 - Страница не найдена</h1>`;
-      this.rootElement.innerHTML = '';
-      this.rootElement.appendChild(notFoundElement);
-      return;
-    }
-
-    // Выбираем компонент в зависимости от типа устройства
-    const ComponentClass = this.deviceType === 'mobile'
-      ? this.currentRoute.mobileComponent
-      : this.currentRoute.desktopComponent;
-
-      const tagName = getTagNameForComponent(ComponentClass);
-      if (!tagName) {
-        throw new Error('Тег для компонента не определен. Проверьте регистрацию customElements и карту имени класса.');
+  private render() {
+      // Удаляем старый компонент, если есть
+      if (this.currentComponent && this.currentComponent.parentNode) {
+        this.currentComponent.parentNode.removeChild(this.currentComponent);
+        this.currentComponent = null;
       }
 
-    // Создаем экземпляр компонента
-    this.currentComponent = document.createElement(tagName) as Component;
+      if (!this.currentRoute) {
+        const notFoundElement = document.createElement('div');
+        notFoundElement.innerHTML = `<h1>404 - Страница не найдена</h1>`;
+        this.rootElement.innerHTML = '';
+        this.rootElement.appendChild(notFoundElement);
+        return;
+      }
 
-    // Передаем параметры маршрута как свойства компонента
-    if ((this.currentRoute as any).params) {
-      Object.entries((this.currentRoute as any).params).forEach(([key, value]) => {
-        this.currentComponent?.setAttribute(key, value as string);
-      });
-    }
+      // Выбираем нужный компонент
+      const ComponentClass = this.deviceType === 'mobile'
+        ? this.currentRoute.mobileComponent
+        : this.currentRoute.desktopComponent;
 
-    // Передаем store в компонент через свойство (если компоненту нужен доступ)
-    if (this.store && 'setStore' in this.currentComponent &&
-      typeof this.currentComponent.setStore === 'function') {
-      this.currentComponent.setStore(this.store);
-    }
+      // Получаем тег и (если надо) регистрируем компонент:
+      const tagName = getTagForComponent(ComponentClass);
 
-    // Очищаем контейнер и добавляем компонент
-    this.rootElement.innerHTML = '';
-    this.rootElement.appendChild(this.currentComponent);
+      // Создаем компонент через document.createElement
+      this.currentComponent = document.createElement(tagName) as Component;
 
-    // Обновляем заголовок страницы (опционально)
-    document.title = this.getCurrentTitle();
+      // Передаём параметры маршрута
+      if ((this.currentRoute as any).params) {
+        Object.entries((this.currentRoute as any).params).forEach(([key, value]) => {
+          this.currentComponent?.setAttribute(key, value as string);
+        });
+      }
 
-    // Активируем ссылки текущего маршрута
-    this.updateActiveLinks();
+      // Передаём store, если компонент поддерживает
+      if (this.store && 'setStore' in this.currentComponent &&
+        typeof this.currentComponent.setStore === 'function') {
+        this.currentComponent.setStore(this.store);
+      }
+
+      this.rootElement.innerHTML = '';
+      this.rootElement.appendChild(this.currentComponent);
+
+      document.title = this.getCurrentTitle();
+      this.updateActiveLinks();
   }
 
   /**
