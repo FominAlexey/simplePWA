@@ -9,6 +9,19 @@ export interface Route {
   mobileComponent: typeof Component;
 }
 
+function getTagNameForComponent(ComponentClass: typeof Component): string {
+  // Сопоставление классов с именами тегов (т.к. регистрируются под конкретными тегами)
+  const map = new Map([
+    ['DesktopHome', 'desktop-home'],
+    ['MobileHome', 'mobile-home'],
+    ['DesktopAbout', 'desktop-about'],
+    ['MobileAbout', 'mobile-about'],
+    // Добавьте свои компоненты здесь, если появятся новые!
+  ]);
+  // По имени класса возвращаем имя тега
+  return map.get(ComponentClass.name) || '';
+}
+
 export class Router {
   private routes: Route[];
   private currentRoute: Route | null = null;
@@ -146,8 +159,13 @@ export class Router {
       ? this.currentRoute.mobileComponent
       : this.currentRoute.desktopComponent;
 
+      const tagName = getTagNameForComponent(ComponentClass);
+      if (!tagName) {
+        throw new Error('Тег для компонента не определен. Проверьте регистрацию customElements и карту имени класса.');
+      }
+
     // Создаем экземпляр компонента
-    this.currentComponent = new ComponentClass() as Component;
+    this.currentComponent = document.createElement(tagName) as Component;
 
     // Передаем параметры маршрута как свойства компонента
     if ((this.currentRoute as any).params) {
