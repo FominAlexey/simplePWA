@@ -6,8 +6,6 @@ import {
 } from './component';
 import { Store } from './store';
 import { SyncDataManager } from '../indexedDB';
-import { createPWAProject } from '../cli/pwa/createPWA.js';
-import { createServiceWorkerFile } from '../cli/serviceWorker/createServiceWorker.js';
 
 // Регистрация кастомных элементов
 customElements.define('desktop-home', DesktopHome);
@@ -483,36 +481,6 @@ export class App {
       console.error('Ошибка при проверке/синхронизации:', error);
       return { synced: false, reason: 'error', error };
     }
-  }
-
-  /**
-   * Создает новый PWA проект
-   * @param projectName - Имя проекта
-   * @param options - Настройки проекта
-   * @returns Promise с информацией о созданном проекте
-   */
-  static async createPWAProject(projectName: string, options = {}) {
-    return createPWAProject(projectName, options);
-  }
-
-  /**
-   * Генерирует Service Worker для PWA с указанными опциями
-   * @param options - Настройки Service Worker
-   * @param options.strategy - Стратегия кеширования ('cache-first' или 'network-first')
-   * @param options.enablePush - Включить поддержку push-уведомлений
-   * @param options.offlineUI - Создать offline страницу
-   * @param options.targetDir - Путь к директории проекта (по умолчанию текущая директория)
-   * @param options.silent - Не выводить сообщения в консоль
-   * @returns Promise, который разрешается после создания файлов
-   */
-  static async generateServiceWorker(options: {
-    strategy?: 'cache-first' | 'network-first',
-    enablePush?: boolean,
-    offlineUI?: boolean,
-    targetDir?: string,
-    silent?: boolean
-  } = {}) {
-    return createServiceWorkerFile(options);
   }
 }
 
