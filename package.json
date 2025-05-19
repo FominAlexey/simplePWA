@@ -1,6 +1,6 @@
 {
   "name": "@dakir/simple-pwa",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "typings": "dist/types/index.d.ts",
@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/FominAlexey/simplePWA.git"
   },
+  "description": "Modern framework for creating adaptive, reactive Progressive Web Applications (PWA) with offline support. Built on Web Components with easy IndexedDB integration, responsive routing, and a reactive store for offline-first applications.",
   "keywords": [
     "pwa",
     "progressive web app",
