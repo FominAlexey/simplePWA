@@ -8,7 +8,7 @@
   "author": "Fomin Aleksey Vadimovich <lekha.fomin2013@yandex.ru>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FominAlexey/simplePWA.git"
+    "url": "https://github.com/FominAlexey/simplePWA.git"
   },
   "description": "Modern framework for creating adaptive, reactive Progressive Web Applications (PWA) with offline support. Built on Web Components with easy IndexedDB integration, responsive routing, and a reactive store for offline-first applications.",
   "keywords": [
