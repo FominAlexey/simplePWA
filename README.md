@@ -1,5 +1,351 @@
 # 🚀 SimplePWA Framework
 
+# Description in English
+
+**SimplePWA** — It is a modern framework for creating adaptive, reactive web applications with offline mode support и PWA (Progressive Web Applications).
+The framework is built on [Web Components](https://developer.mozilla.org/ru/docs/Web/Web_Components) and provides easy integration [IndexedDB](https://developer.mozilla.org/ru/docs/Web/API/IndexedDB_API) for `offline-first` applications.
+
+---
+
+## ✨ Main features
+
+| Feature | Description |
+|--------|----------|
+| 📱 Responsive Routing | Automatic detection of device type and loading of appropriate components |
+| 💾 Offline Support | Data synchronization and operation without internet connection |
+| 🔄 Reactive Store | Global state with subscriptions for changes |
+| 📦 Web Components | Encapsulation of styles and logic in custom elements |
+| 🚀 PWA out of the box | Service Worker, manifest, and tools for creating PWA applications |
+| 🛠️ CLI Tools | Rapid creation of new PWA projects |
+
+---
+
+## 📦 Installation
+
+```bash
+npm install simple-pwa
+# or
+yarn add simple-pwa
+```
+
+---
+
+## 🧪 Quick Start
+
+```js
+import { App } from '@dakir/simple-pwa';
+
+// Create an instance of the application
+const app = App.create({
+  rootElement: '#app',
+  pwa: {
+    enabled: true,
+    serviceWorkerPath: '/service-worker.js'
+  }
+});
+
+// Launch the application
+app.start();
+```
+
+---
+
+## 🧭 Routing
+
+The framework automatically detects the device type (mobile / desktop) and loads the corresponding components:
+
+```js
+const routes = [
+  {
+    path: '/',
+    desktopComponent: DesktopHome,
+    mobileComponent: MobileHome
+  },
+  {
+    path: '/about',
+    desktopComponent: DesktopAbout,
+    mobileComponent: MobileAbout
+  }
+];
+
+const app = new App({ routes });
+```
+
+---
+
+## 🧩 Components
+
+Create responsive components by inheriting from the base class:
+
+```js
+import { Component } from '@dakir/simple-pwa';
+
+class CustomComponent extends Component {
+  render() {
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = `
+        <style>
+          :host { display: block; padding: 20px; }
+          h2 { color: #2c3e50; }
+        </style>
+        <h2>My component</h2>
+        <p>Counter: ${this.state.count || 0}</p>
+        <button id="increment">+</button>
+      `;
+
+      this.shadowRoot.getElementById('increment')?.addEventListener('click', () => {
+        this.setState({ count: (this.state.count || 0) + 1 });
+      });
+    }
+  }
+}
+
+customElements.define('custom-component', CustomComponent);
+```
+
+---
+
+## 🗄️ Working with Store
+
+Global state with reactive updates:
+
+```js
+import { Store } from '@dakir/simple-pwa';
+
+// Creating a global store
+const appStore = new Store({
+  user: null,
+  theme: 'light',
+  counter: 0
+});
+
+// Updating state
+appStore.setState({ theme: 'dark' });
+
+// Subscribing to changes
+const unsubscribe = appStore.subscribe(state => {
+  console.log('State updated:', state);
+});
+
+// Unsubscribe from updates
+unsubscribe();
+```
+
+---
+
+## 🔌 Offline-First with IndexedDB
+
+SimplePWA includes a powerful sync manager for working with data in offline mode:
+
+```js
+import { App } from '@dakir/simple-pwa';
+
+const app = App.create({
+  syncDataManagerOptions: {
+    dbName: 'my-app-db'
+  }
+});
+
+// Retrieving data from IndexedDB
+const items = await app.getDBList();
+
+// Adding an item
+await app.addDBItem({
+  id: '123',
+  type: 'task',
+  data: JSON.stringify({ title: 'Task', completed: false }),
+  lastModified: new Date().toISOString(),
+  lastSynced: new Date().toISOString()
+});
+
+// Synchronizing with the server when the connection is restored
+app.setupAutoSync({
+  tasks: () => fetch('/api/tasks').then(res => res.json()),
+  users: () => fetch('/api/users').then(res => res.json())
+}, {
+  onNetworkRestore: true,
+  interval: 5 * 60 * 1000  // Every 5 minutes
+});
+```
+
+---
+
+## 🛠️ Creating PWA via CLI
+
+```bash
+npx create-pwa my-project
+```
+
+CLI will ask questions about the name, description, icons, and other parameters. Upon completion, you'll get a ready-to-use PWA project that you can launch immediately.
+
+### 🧑‍🔧 Generating a Service Worker
+
+```bash
+npx create-sw
+```
+
+CLI will help set up caching strategies and handle offline states.
+
+---
+
+## 📘 API Reference
+
+### `App`
+
+The `App` class encapsulates routing, global state, synchronization, and PWA operations.
+
+#### 🏁 Creating an Application
+
+```js
+import { App } from '@dakir/simple-pwa';
+
+const app = App.create({
+  rootElement: '#app', // or HTMLElement
+  routes: [ /* ... */ ],
+  pwa: { enabled: true },
+  syncDataManagerOptions: { dbName: 'my-db' }
+});
+```
+
+#### 🔧 Main Methods
+
+| Method | Description |
+|------|----------|
+| `start()` | Start the application |
+| `navigate(path)` | Navigate to a route |
+| `getDeviceType()` | Get current device type (`mobile` / `desktop`) |
+| `getState()` | Get store state object |
+| `setState(patch)` | Update store state |
+| `addEventListener()` | Add a global event handler |
+
+---
+
+### 🧲 Working with IndexedDB (SyncDataManager)
+
+| Method | Description |
+|------|----------|
+| `getDBList(...)` | Retrieve a list of objects from IndexedDB |
+| `getDBListByIndex(...)` | Retrieve a list by index |
+| `getDBItem(id)` | Retrieve an object by ID |
+| `getDBItemByIndex(...)` | Retrieve an object by a specific index |
+| `addDBItem(obj)` | Add an object |
+| `updateDBItem(obj)` | Update an object |
+| `deleteDBItem(id)` | Delete an object by ID |
+| `syncDBList(fetchMethod)` | Synchronize a list with the server |
+| `syncDBItem(fetchMethod)` | Synchronize a single object with the server |
+| `isSyncNeeded(lastSynced, [timeDelay])` | Check if re-synchronization is needed |
+| `deleteDB([nameDB])` | Delete a database |
+| `isOfflineMode()` | Check if the app is in offline mode |
+| `isSyncing()` | Check if synchronization is currently in progress |
+| `syncAllData(methods)` | Run synchronization of all collections (e.g., tasks and users simultaneously) |
+| `setupAutoSync(methods, options)` | Configure auto-sync on network restoration, by timer, or at startup |
+| `checkAndSync(id, method, [timeDelay])` | Check and synchronize data as needed |
+
+#### Example usage of synchronization methods
+
+```js
+// Retrieve all tasks
+const tasks = await app.getDBList();
+
+// Add a new task
+await app.addDBItem({ id: '1', type: 'task', ... });
+
+// Synchronize tasks with the server
+await app.syncDBList(() => fetch('/api/tasks').then(r => r.json()));
+
+// Auto-sync when the network is restored
+app.setupAutoSync({
+  tasks: () => fetch('/api/tasks').then(r => r.json())
+});
+```
+
+---
+
+### 🧠 Store
+
+Reactive global store for storing application state.
+
+```js
+import { Store } from '@dakir/simple-pwa';
+
+// Create a store
+const store = new Store({ theme: 'light', counter: 0 });
+
+// Subscribe to changes
+const unsubscribe = store.subscribe(state => {
+  console.log('New state:', state);
+});
+
+// Update state
+store.setState({ theme: 'dark' });
+
+// Unsubscribe
+unsubscribe();
+```
+
+---
+
+### 🧱 Components (Web Components)
+
+Base class `Component` and derived classes `DesktopComponent`, `MobileComponent`.
+
+```js
+import { Component } from '@dakir/simple-pwa';
+
+class MyCounter extends Component {
+  render() {
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = `
+        <span>Count: ${this.state.count || 0}</span>
+        <button id="inc">+</button>
+      `;
+      this.shadowRoot.getElementById('inc')?.addEventListener('click', () => {
+        this.setState({ count: (this.state.count || 0) + 1 });
+      });
+    }
+  }
+}
+
+customElements.define('my-counter', MyCounter);
+```
+
+---
+
+### 🧭 Adaptive Routing
+
+Use mobile and desktop components for different devices:
+
+```js
+const routes = [
+  {
+    path: '/',
+    desktopComponent: DesktopHome,
+    mobileComponent: MobileHome
+  }
+];
+const app = new App({ routes });
+```
+
+---
+
+## 📜 License
+
+MIT
+
+---
+
+## 📬 Feedback and Support
+
+Found a bug or want to suggest an improvement?
+Open an [issue](https://github.com/FominAlexey/simplePWA/issues) or [PR](https://github.com/FominAlexey/simplePWA/pulls)!
+
+
+---
+
+🚀 **SimplePWA — your fast path to production-ready PWA!**
+
+# Описание на русском
+
 **SimplePWA** — это современный фреймворк для создания адаптивных, реактивных веб-приложений с поддержкой оффлайн-режима и PWA (Progressive Web Applications).
 Фреймворк построен на [Web Components](https://developer.mozilla.org/ru/docs/Web/Web_Components) и обеспечивает простую интеграцию [IndexedDB](https://developer.mozilla.org/ru/docs/Web/API/IndexedDB_API) для `offline-first` приложений.
 
@@ -335,7 +681,7 @@ MIT
 ## 📬 Обратная связь и поддержка
 
 Нашли баг или хотите предложить улучшение?
-Открывайте [issue](https://github.com/example/simple-pwa/issues) или [PR](https://github.com/example/simple-pwa/pulls)!
+Открывайте [issue](https://github.com/FominAlexey/simplePWA/issues) или [PR](https://github.com/FominAlexey/simplePWA/pulls)!
 
 ---
 
