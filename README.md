@@ -23,9 +23,9 @@ The framework is built on [Web Components](https://developer.mozilla.org/ru/docs
 ## 📦 Installation
 
 ```bash
-npm install simple-pwa
+npm install @dakir/simple-pwa
 # or
-yarn add simple-pwa
+yarn add @dakir/simple-pwa
 ```
 
 ---
@@ -367,9 +367,9 @@ Open an [issue](https://github.com/FominAlexey/simplePWA/issues) or [PR](https:/
 ## 📦 Установка
 
 ```bash
-npm install simple-pwa
+npm install @dakir/simple-pwa
 # или
-yarn add simple-pwa
+yarn add @dakir/simple-pwa
 ```
 
 ---
