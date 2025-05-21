@@ -24,6 +24,7 @@ interface AppConfig {
     optionalParametersDB?: IDBObjectStoreParameters;
     parametersSyncRequest?: any;
   };
+  showOfflineOverlay?: boolean;
 }
 
 export class App {
@@ -76,7 +77,12 @@ export class App {
     ];
 
     // Инициализируем роутер с передачей store
-    this.router = new Router(routes, this.rootElement, this.store);
+    this.router = new Router(
+      routes,
+      this.rootElement,
+      this.store,
+      this.config.showOfflineOverlay !== false
+    );
 
     // Инициализируем PWA, если включено
     if (this.config.pwa?.enabled) {

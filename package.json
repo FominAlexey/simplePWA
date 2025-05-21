@@ -1,6 +1,6 @@
 {
   "name": "@dakir/simple-pwa",
-  "version": "1.3.9",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "typings": "dist/types/index.d.ts",
@@ -43,7 +43,7 @@
     "test:coverage": "jest --coverage",
     "changeset": "changeset",
     "release:version": "changeset version",
-    "release:publish": "yarn build && changeset publish",
+    "release:publish": "yarn build && changeset publish --registry=https://registry.npmjs.org/",
     "prettier:fix": "prettier --ignore-unknown --write",
     "prettier:check": "prettier --check .",
     "lint:ts": "tsc --project tsconfig.json --noEmit",
